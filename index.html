@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>고급 노가다 게임</title>
+    <style>
+        body {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            margin: 10px;
+        }
+        h1, p, .button-container {
+            margin-top: 20px; /* 여기에 원하는 여백 값을 설정합니다. */
+        }
+    </style>
+</head>
+<body>
+    <h1>고급 노가다 게임</h1>
+    <p>목표 숫자: <span id="targetNumber">25</span></p>
+    <p>현재 숫자: <span id="currentNumber">0</span></p>
+    <p>남은 시간: <span id="timer">30</span> 초</p>
+    <div class="button-container">
+        <button onclick="increaseNumber()">노가다</button>
+        <button onclick="resetGame()">게임 재시작</button>
+    </div>
+    <p id="message"></p>
+
+    <script>
+        let currentNumber = 0;
+        let remainingTime = 30;
+        let timerInterval;
+
+        function updateTimer() {
+            document.getElementById("timer").textContent = remainingTime + " 초";
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(function() {
+                remainingTime--;
+                updateTimer();
+                if (remainingTime <= 0) {
+                    clearInterval(timerInterval);
+                    document.getElementById("message").textContent = "시간 종료! 게임 종료!";
+                    document.querySelector("button").disabled = true;
+                }
+            }, 1000);
+        }
+
+        function increaseNumber() {
+            if (remainingTime <= 0) {
+                return;
+            }
+            currentNumber++;
+            document.getElementById("currentNumber").textContent = currentNumber;
+
+            if (currentNumber === targetNumber) {
+                clearInterval(timerInterval);
+                document.getElementById("message").textContent = "축하합니다! 목표 숫자에 도달하셨습니다!";
+                document.getElementById("message").style.color = "green";
+                document.querySelector("button").disabled = true;
+            }
+        }
+
+        function resetGame() {
+            targetNumber = Math.floor(Math.random() * 50) + 1; // 1에서 50 사이의 무작위 목표 숫자 생성
+            currentNumber = 0;
+            remainingTime = 30;
+            updateTimer();
+            document.getElementById("currentNumber").textContent = currentNumber;
+            document.getElementById("targetNumber").textContent = targetNumber;
+            document.querySelector("button").disabled = false;
+            document.getElementById("message").textContent = "";
+            startTimer();
+        }
+
+        resetGame(); // 게임 시작 시에 목표 숫자 초기화
+    </script>
+</body>
+</html>
